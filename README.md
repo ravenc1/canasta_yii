@@ -23,80 +23,153 @@ La interfaz está personalizada con fondos de pantalla aleatorios, un menú supe
 
 ---
 
-## 2. Cómo clonar y ejecutar el proyecto (para los compañeros)
+## 2. Cómo clonar y ejecutar el proyecto (paso a paso)
+
+Procedimiento completo para clonar el repositorio en una máquina limpia y dejar la aplicación funcionando. Copia y pega los comandos en tu terminal (**PowerShell/CMD** en Windows, **bash** en Linux/macOS).
+
+> El repositorio ya incluye `config/db.php`, la carpeta `web/assets/` (con `.gitkeep`), `composer.lock` y todas las imágenes de `web/uploads/`, por lo que **no necesitas crearlas a mano**.
 
 ### 2.1 Requisitos previos
 
-- **Git** instalado.
-- **PHP 8.x**.
-- **Composer**.
-- **MySQL / MariaDB** (se recomienda XAMPP).
-- Navegador web moderno.
+- **Git** instalado — `git --version`
+- **PHP 8.0 o superior** — `php -v`
+- **Composer 2** — `composer -V`
+- **MySQL / MariaDB** — se recomienda **XAMPP**
+- Navegador web moderno
 
-### 2.2 Clonar el repositorio desde GitHub
+Verifica las extensiones de PHP que necesita Yii 2 con MySQL:
 
 ```bash
-git clone https://github.com/USUARIO/canasta_yii.git
+php -m | findstr /I "pdo_mysql mbstring"   # Windows (CMD/PowerShell)
+php -m | grep -Ei "pdo_mysql|mbstring"     # Linux / macOS
+```
+
+> Debes ver `pdo_mysql` y `mbstring`. En XAMPP vienen habilitadas por defecto.
+
+### 2.2 Clonar el repositorio
+
+```bash
+git clone https://github.com/ravenc1/canasta_yii.git
 cd canasta_yii
 ```
 
-> Reemplazar `https://github.com/USUARIO/canasta_yii.git` por la URL real del repositorio.
-
-### 2.3 Instalar dependencias
+### 2.3 Instalar las dependencias
 
 ```bash
 composer install
 ```
 
-Esto descarga Yii 2, bootstrap5, las librerías de depuración y el resto de dependencias definidas en `composer.json`.
+Esto crea la carpeta `vendor/` e instala **exactamente** las versiones registradas en `composer.lock` (Yii 2, Bootstrap 5, JQuery UI, SwiftMailer, Debug, Gii, etc.). La instalación es reproducible en cualquier máquina.
 
-### 2.4 Configurar la base de datos
+### 2.4 Crear la base de datos
 
-1. Iniciar MySQL/MariaDB (desde XAMPP o el servicio correspondiente).
-2. Crear la base de datos:
+Inicia MySQL/MariaDB y crea la base de datos `lacanasta_db` con `utf8mb4`.
 
-```sql
-CREATE DATABASE lacanasta_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+**Opción A — línea de comandos (XAMPP en Windows):**
+
+```bash
+C:\xampp\mysql\bin\mysql.exe -u root -e "CREATE DATABASE IF NOT EXISTS lacanasta_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 ```
 
-3. Verificar/editar `config/db.php` (por defecto usa `localhost`, usuario `root` y contraseña vacía, típico de XAMPP):
+**Opción B — Linux/macOS o si `mysql` está en el PATH:**
+
+```bash
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS lacanasta_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+**Opción C — phpMyAdmin (XAMPP):** entra a `http://localhost/phpmyadmin`, pestaña **Bases de datos**, crea `lacanasta_db` con cotejamiento `utf8mb4_unicode_ci`.
+
+### 2.5 Revisar la conexión en `config/db.php`
+
+El archivo ya viene incluido en el repositorio con los valores típicos de XAMPP:
 
 ```php
+<?php
+
 return [
     'class' => 'yii\db\Connection',
-    'dsn' => 'mysql:host=localhost;dbname=lacanasta_db',
+    'dsn' => 'mysql:host=localhost;dbname=lacanasta_db;charset=utf8mb4',
     'username' => 'root',
     'password' => '',
-    'charset' => 'utf8',
+    'charset' => 'utf8mb4',
 ];
 ```
 
-### 2.5 Ejecutar las migraciones
+Si tu MySQL usa otro usuario, contraseña, host o puerto, edita esos valores y guarda el archivo.
 
-Esto crea las tablas (`equipo`, `jugador`, `tipo_tiro`, `puntuacion`) e inserta los datos de prueba:
+### 2.6 Ejecutar las migraciones (crear tablas + datos iniciales)
 
 ```bash
 php yii migrate --interactive=0
 ```
 
-Incluye un seeder con 4 equipos, 12 jugadores, catálogo de tipos de tiro y ~30 registros de puntuación.
+Esto crea las tablas `equipo`, `jugador`, `tipo_tiro` y `puntuacion`, e inserta los datos iniciales: **6 equipos, 30 jugadores (5 por equipo), 3 tipos de tiro y 77 puntuaciones**.
 
-### 2.6 Levantar el servidor de desarrollo
+> **¿Ya habías migrado antes y quieres reiniciar los datos?** Revierte y vuelve a migrar:
 
-Opción A (servidor embebido de Yii):
+```bash
+php yii migrate/down --all --interactive=0
+php yii migrate --interactive=0
+```
+
+### 2.7 Levantar el servidor de desarrollo
 
 ```bash
 php yii serve
 ```
 
-Abrir en el navegador: `http://localhost:8080/`
+Abre en el navegador: **`http://localhost:8080/`**
 
-Opción B (XAMPP):
+Si el puerto 8080 está ocupado, usa otro puerto:
 
-1. Copiar/clonar el proyecto dentro de `C:\xampp\htdocs\canasta_yii`.
-2. Acceder a: `http://localhost/canasta_yii/web/`
+```bash
+php yii serve --port=8081
+```
 
-> En el primer arranque asegurarse de que MySQL esté encendido, de lo contrario los módulos que consultan la base de datos mostrarán error de conexión.
+**Opción alternativa con XAMPP (Apache):**
+
+1. Coloca el proyecto dentro de `C:\xampp\htdocs\canasta_yii`.
+2. Inicia **Apache** y **MySQL** desde el panel de XAMPP.
+3. Abre `http://localhost/canasta_yii/web/`.
+
+> Mantén MySQL encendido mientras uses la aplicación; si está apagado verás errores de conexión en los módulos que consultan la base de datos.
+
+### 2.8 Resumen: clonación completa en un solo bloque
+
+**Windows (PowerShell/CMD) con XAMPP en `C:\xampp`:**
+
+```bash
+git clone https://github.com/ravenc1/canasta_yii.git
+cd canasta_yii
+composer install
+C:\xampp\mysql\bin\mysql.exe -u root -e "CREATE DATABASE IF NOT EXISTS lacanasta_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+php yii migrate --interactive=0
+php yii serve
+```
+
+**Linux / macOS:**
+
+```bash
+git clone https://github.com/ravenc1/canasta_yii.git
+cd canasta_yii
+composer install
+mysql -u root -e "CREATE DATABASE IF NOT EXISTS lacanasta_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+php yii migrate --interactive=0
+php yii serve
+```
+
+### 2.9 Solución de problemas frecuentes
+
+| Problema | Causa / Solución |
+|---|---|
+| `InvalidConfigException: The directory does not exist: .../web/assets` | Falta la carpeta `web/assets/`. Está versionada mediante `.gitkeep`, así que con un clon completo debería existir; si la borraste, recréala vacía. |
+| `Fatal error: Failed opening required '.../config/db.php'` | Falta `config/db.php`; ya viene en el repositorio. Asegúrate de clonar/actualizar completo. |
+| `SQLSTATE[HY000] [2002] Connection refused` | MySQL/MariaDB no está iniciado. Enciéndelo (XAMPP) e intenta de nuevo. |
+| `Unknown database 'lacanasta_db'` | No creaste la base de datos. Repite el paso **2.4**. |
+| Solo se ven 4 equipos y 12 jugadores | Ejecutaste un seeder antiguo. Haz `git pull` y reinicia la base de datos (paso **2.6**, "reiniciar los datos"). |
+| `Class 'yii\...' not found` | No se instalaron las dependencias. Ejecuta `composer install`. |
+| El puerto 8080 está ocupado | Usa `php yii serve --port=8081`. |
+| No se ven logos, fotos ni fondos | Verifica que exista `web/uploads/` con sus imágenes (vienen versionadas en el repo). |
 
 ---
 
@@ -178,7 +251,7 @@ canasta_yii/
 | `m241013_000002_create_jugador_table.php` | Crea la tabla `jugador` (datos personales, fotografía y FK a `equipo`). |
 | `m241013_000003_create_tipo_tiro_table.php` | Crea la tabla `tipo_tiro` (catálogo de tipos de tiro). |
 | `m241013_000004_create_puntuacion_table.php` | Crea la tabla `puntuacion` (jugador, tipo de tiro, cantidad, jornada, fecha). |
-| `m241013_000005_seed_data.php` | Inserta datos de prueba (4 equipos, 12 jugadores, tipos de tiro y ~30 puntuaciones). |
+| `m241013_000005_seed_data.php` | Inserta los datos iniciales (6 equipos, 30 jugadores, 3 tipos de tiro y 77 puntuaciones). |
 
 ### 4.7 Carpeta `models/`
 
@@ -251,6 +324,7 @@ canasta_yii/
 | `index.php` | Punto de entrada de la aplicación web. |
 | `.htaccess` | Reglas de reescritura para URLs limpias en Apache. |
 | `css/site.css` | Estilos personalizados: fondos, transparencia de módulos, menús desplegables, tablas. |
+| `assets/` | Carpeta destino de los assets públicos que Yii publica automáticamente (`AssetManager`). Se mantiene en el repositorio con `.gitkeep` y se llena en el primer arranque. |
 | `uploads/logos/` | Logos de equipos subidos. |
 | `uploads/fotos/` | Fotografías de jugadores subidas. |
 | `uploads/fondos/` | Imágenes de fondo aleatorias por página. |
@@ -262,4 +336,6 @@ canasta_yii/
 
 - Si el fondo o las imágenes no se ven, verificar permisos y que la carpeta `web/uploads/` exista.
 - Si la base de datos falla, confirmar que MySQL esté iniciado y que `config/db.php` tenga las credenciales correctas.
+- Los datos iniciales (**6 equipos, 30 jugadores, 3 tipos de tiro y 77 puntuaciones**) los carga el seeder al ejecutar `php yii migrate`. Para regenerarlos: `php yii migrate/down --all --interactive=0` y luego `php yii migrate --interactive=0`.
+- `composer.lock` está versionado: `composer install` instala versiones exactas y reproducibles en cualquier máquina.
 - La página "Acerca de" contiene la información del proyecto, herramientas y los integrantes del grupo.
