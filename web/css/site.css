@@ -1,0 +1,33 @@
+body { padding-top: 0; }
+.jumbotron { border: 1px solid #e3e3e3; }
+
+/* Evita fondos solidos que oculten el background en modulos */
+.app-container .card {
+    background-color: rgba(255, 255, 255, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+.app-container .table {
+    background-color: rgba(255, 255, 255, 0.35);
+}
+.app-container .table th,
+.app-container .table td {
+    background-color: rgba(255, 255, 255, 0.35) !important;
+}
+.app-container .grid-view .table {
+    background-color: rgba(255, 255, 255, 0.35);
+}
+.app-container h1,
+.app-container h2,
+.app-container h3,
+.app-container h4,
+.app-container h5,
+.app-container p,
+.app-container label,
+.app-container .form-control,
+.app-container .form-select {
+    text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+}
+.app-container .form-control,
+.app-container .form-select {
+    background-color: rgba(255, 255, 255, 0.75);
+}

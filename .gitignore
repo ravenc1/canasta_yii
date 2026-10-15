@@ -1,0 +1,32 @@
+# Composer
+/vendor/
+/composer.phar
+composer.lock
+
+# Yii runtime & generated assets
+/runtime/
+/web/assets/
+
+# Local configuration
+/config/db.php
+/config/params-local.php
+/config/web-local.php
+.env
+*.local.php
+
+# Uploads
+/web/uploads/
+# If you want to keep folder structure only, use:
+# /web/uploads/*
+# !/web/uploads/.gitkeep
+
+# IDE / OS
+/.idea/
+/.vscode/
+*.log
+.DS_Store
+Thumbs.db
+
+# Cache
+/yii.bat
+*.cache
