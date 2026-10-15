@@ -5,7 +5,12 @@ composer.lock
 
 # Yii runtime & generated assets
 /runtime/
-/web/assets/
+
+# Yii AssetManager publish folder.
+# Keep the folder in the repo (so it exists after cloning) but ignore
+# the generated/published files inside it.
+/web/assets/*
+!/web/assets/.gitkeep
 
 # Local configuration
 /config/db.php
@@ -14,11 +19,8 @@ composer.lock
 .env
 *.local.php
 
-# Uploads
-/web/uploads/
-# If you want to keep folder structure only, use:
-# /web/uploads/*
-# !/web/uploads/.gitkeep
+# Uploads: include all content and images (logos, fotos, fondos e icono)
+# The whole folder is tracked; nothing inside is ignored.
 
 # IDE / OS
 /.idea/
