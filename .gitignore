@@ -12,11 +12,12 @@ composer.lock
 /web/assets/*
 !/web/assets/.gitkeep
 
-# Local configuration
-/config/db.php
+# Local configuration: shared defaults are committed; per-machine overrides are ignored.
+/config/db-local.php
 /config/params-local.php
 /config/web-local.php
 .env
+.env.*
 *.local.php
 
 # Uploads: include all content and images (logos, fotos, fondos e icono)
