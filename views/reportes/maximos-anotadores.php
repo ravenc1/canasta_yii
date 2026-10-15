@@ -27,7 +27,7 @@ $this->title = 'Máximos Anotadores';
                 <td><?= Html::encode($r['apellidos']) ?></td>
                 <td><?= Html::encode($r['equipo']) ?></td>
                 <td><strong><?= (int)$r['total_puntos'] ?></strong></td>
-                <td><?= Html::a('Ver perfil', ['/reportes/perfil', 'id' => $r['jugador_id']], ['class' => 'btn btn-sm btn-info']) ?></td>
+                <td><?= Html::a('Ver perfil', ['/reportes/perfil', 'id' => $r['jugador_id'], 'from' => 'maximos'], ['class' => 'btn btn-sm btn-info']) ?></td>
             </tr>
         <?php endforeach; ?>
     </tbody>

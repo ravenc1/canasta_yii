@@ -49,11 +49,15 @@ class JugadorController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
-            if ($model->fotoFile) {
-                $model->uploadFoto();
-            }
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->validate()) {
+                $ok = true;
+                if ($model->fotoFile && !$model->uploadFoto()) {
+                    $model->addError('fotoFile', 'No se pudo guardar el archivo de la fotografía.');
+                    $ok = false;
+                }
+                if ($ok && $model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         }
 
@@ -68,11 +72,15 @@ class JugadorController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->fotoFile = UploadedFile::getInstance($model, 'fotoFile');
-            if ($model->fotoFile) {
-                $model->uploadFoto();
-            }
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->validate()) {
+                $ok = true;
+                if ($model->fotoFile && !$model->uploadFoto()) {
+                    $model->addError('fotoFile', 'No se pudo guardar el archivo de la fotografía.');
+                    $ok = false;
+                }
+                if ($ok && $model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         }
 
@@ -84,6 +92,8 @@ class JugadorController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        \app\models\Jugador::renumberIds();
+        \app\models\Puntuacion::renumberIds();
         return $this->redirect(['index']);
     }
 

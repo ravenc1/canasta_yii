@@ -75,7 +75,7 @@ class ReportesController extends Controller
     /**
      * Ficha individual del jugador con historial de puntos por jornada.
      */
-    public function actionPerfil($id)
+    public function actionPerfil($id, $from = null)
     {
         $model = Jugador::findOne($id);
         if ($model === null) {
@@ -104,6 +104,7 @@ class ReportesController extends Controller
             'historial' => $historial,
             'porJornada' => $porJornada,
             'total' => $total,
+            'from' => $from,
         ]);
     }
 }

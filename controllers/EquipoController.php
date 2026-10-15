@@ -49,13 +49,15 @@ class EquipoController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->logoFile = UploadedFile::getInstance($model, 'logoFile');
-            if ($model->logoFile) {
-                if ($model->uploadLogo()) {
-                    // ok
+            if ($model->validate()) {
+                $ok = true;
+                if ($model->logoFile && !$model->uploadLogo()) {
+                    $model->addError('logoFile', 'No se pudo guardar el archivo del logo.');
+                    $ok = false;
                 }
-            }
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                if ($ok && $model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         }
 
@@ -70,11 +72,15 @@ class EquipoController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->logoFile = UploadedFile::getInstance($model, 'logoFile');
-            if ($model->logoFile) {
-                $model->uploadLogo();
-            }
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->validate()) {
+                $ok = true;
+                if ($model->logoFile && !$model->uploadLogo()) {
+                    $model->addError('logoFile', 'No se pudo guardar el archivo del logo.');
+                    $ok = false;
+                }
+                if ($ok && $model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         }
 
@@ -86,6 +92,9 @@ class EquipoController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        \app\models\Equipo::renumberIds();
+        \app\models\Jugador::renumberIds();
+        \app\models\Puntuacion::renumberIds();
         return $this->redirect(['index']);
     }
 

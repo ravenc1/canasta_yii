@@ -11,6 +11,7 @@ $this->title = $model->nombres . ' ' . $model->apellidos;
         'data' => ['confirm' => '¿Eliminar jugador?', 'method' => 'post'],
     ]) ?>
     <?= Html::a('Ver perfil', ['/reportes/perfil', 'id' => $model->id], ['class' => 'btn btn-info']) ?>
+    <?= Html::a('Regresar', ['index'], ['class' => 'btn btn-secondary']) ?>
 </p>
 <table class="table table-bordered">
     <tr><th>ID</th><td><?= $model->id ?></td></tr>

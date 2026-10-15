@@ -10,6 +10,7 @@ $this->title = $model->nombre;
         'class' => 'btn btn-danger',
         'data' => ['confirm' => '¿Eliminar equipo?', 'method' => 'post'],
     ]) ?>
+    <?= Html::a('Regresar', ['index'], ['class' => 'btn btn-secondary']) ?>
 </p>
 <table class="table table-bordered">
     <tr><th>ID</th><td><?= $model->id ?></td></tr>

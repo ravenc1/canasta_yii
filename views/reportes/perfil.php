@@ -69,5 +69,5 @@ $model = $model;
     </div>
 </div>
 <p class="mt-3">
-    <?= Html::a('Volver', ['/reportes/maximos-anotadores'], ['class' => 'btn btn-secondary']) ?>
+    <?= Html::a('Volver', $from === 'maximos' ? ['/reportes/maximos-anotadores'] : ['/reportes/general'], ['class' => 'btn btn-secondary']) ?>
 </p>

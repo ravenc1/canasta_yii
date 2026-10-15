@@ -35,7 +35,7 @@ $this->title = 'Lista General de Jugadores';
                                 <td><?= Html::encode($j->apellidos) ?></td>
                                 <td><?= $j->fecha_nacimiento ?></td>
                                 <td>
-                                    <?= Html::a('Ver', ['/reportes/perfil', 'id' => $j->id], ['class' => 'btn btn-sm btn-info']) ?>
+                                    <?= Html::a('Ver', ['/reportes/perfil', 'id' => $j->id, 'from' => 'general'], ['class' => 'btn btn-sm btn-info']) ?>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

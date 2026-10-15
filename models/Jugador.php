@@ -38,7 +38,7 @@ class Jugador extends ActiveRecord
             [['fecha_nacimiento'], 'date', 'format' => 'php:Y-m-d'],
             [['nombres', 'apellidos'], 'string', 'max' => 100],
             [['fotografia'], 'string', 'max' => 255],
-            [['fotografia'], 'required', 'on' => 'create'],
+            [['fotoFile'], 'required', 'on' => 'create', 'message' => 'La fotografía no puede estar vacía.'],
             [['fotoFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg, jpeg, gif', 'maxSize' => 2 * 1024 * 1024],
             [['created_at'], 'safe'],
         ];
@@ -69,11 +69,52 @@ class Jugador extends ActiveRecord
     }
 
     /**
+     * Renumerar los ID para que no queden huecos tras eliminar registros.
+     */
+    public static function renumberIds()
+    {
+        $db = static::getDb();
+        $table = static::tableName();
+        $transaction = $db->beginTransaction();
+        try {
+            $ids = static::find()->select('id')->orderBy(['id' => SORT_ASC])->column();
+            $newId = 1;
+            foreach ($ids as $oldId) {
+                $oldId = (int) $oldId;
+                if ($oldId !== $newId) {
+                    static::updateAll(['id' => $newId], ['id' => $oldId]);
+                }
+                $newId++;
+            }
+            $next = count($ids) + 1;
+            $db->createCommand('ALTER TABLE ' . $db->quoteTableName($table) . ' AUTO_INCREMENT = ' . $next)->execute();
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
      * Total acumulado de puntos del jugador.
      */
     public function getTotalPuntos()
     {
         return (int) $this->hasMany(Puntuacion::class, ['jugador_id' => 'id'])->sum('puntos');
+    }
+
+    /**
+     * Establece la fecha de registro al crear un nuevo jugador.
+     */
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert && empty($this->created_at)) {
+                $this->created_at = date('Y-m-d H:i:s');
+            }
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -79,4 +79,31 @@ class Puntuacion extends ActiveRecord
     {
         return $this->hasOne(TipoTiro::class, ['id' => 'tipo_tiro_id']);
     }
+
+    /**
+     * Renumerar los ID para que no queden huecos tras eliminar registros.
+     */
+    public static function renumberIds()
+    {
+        $db = static::getDb();
+        $table = static::tableName();
+        $transaction = $db->beginTransaction();
+        try {
+            $ids = static::find()->select('id')->orderBy(['id' => SORT_ASC])->column();
+            $newId = 1;
+            foreach ($ids as $oldId) {
+                $oldId = (int) $oldId;
+                if ($oldId !== $newId) {
+                    static::updateAll(['id' => $newId], ['id' => $oldId]);
+                }
+                $newId++;
+            }
+            $next = count($ids) + 1;
+            $db->createCommand('ALTER TABLE ' . $db->quoteTableName($table) . ' AUTO_INCREMENT = ' . $next)->execute();
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
+    }
 }

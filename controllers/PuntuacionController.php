@@ -59,6 +59,7 @@ class PuntuacionController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
+        \app\models\Puntuacion::renumberIds();
         return $this->redirect(['index']);
     }
 
