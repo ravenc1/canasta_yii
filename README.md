@@ -166,7 +166,6 @@ php yii serve
 | `Fatal error: Failed opening required '.../config/db.php'` | Falta `config/db.php`; ya viene en el repositorio. Asegúrate de clonar/actualizar completo. |
 | `SQLSTATE[HY000] [2002] Connection refused` | MySQL/MariaDB no está iniciado. Enciéndelo (XAMPP) e intenta de nuevo. |
 | `Unknown database 'lacanasta_db'` | No creaste la base de datos. Repite el paso **2.4**. |
-| Solo se ven 4 equipos y 12 jugadores | Ejecutaste un seeder antiguo. Haz `git pull` y reinicia la base de datos (paso **2.6**, "reiniciar los datos"). |
 | `Class 'yii\...' not found` | No se instalaron las dependencias. Ejecuta `composer install`. |
 | El puerto 8080 está ocupado | Usa `php yii serve --port=8081`. |
 | No se ven logos, fotos ni fondos | Verifica que exista `web/uploads/` con sus imágenes (vienen versionadas en el repo). |

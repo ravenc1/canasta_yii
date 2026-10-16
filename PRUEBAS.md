@@ -46,7 +46,7 @@ Módulos accesibles desde la interfaz web y sus rutas principales:
 | Base de datos | MySQL / MariaDB (`lacanasta_db`, utf8mb4) |
 | Navegador | Chrome / Edge (versiones recientes) |
 | URL base | `http://localhost:8080/` o `http://localhost/canasta_yii/web/` |
-| Datos iniciales | Migración semilla: 4 equipos, 12 jugadores, 3 tipos de tiro, ~35 puntuaciones |
+| Datos iniciales | Migración semilla: 6 equipos, 30 jugadores, 3 tipos de tiro, 77 puntuaciones |
 
 ## 4. Metodología
 
@@ -66,7 +66,7 @@ Pruebas **manuales de caja negra**, ejecutando cada caso sobre la interfaz y obs
 
 | ID | Descripción | Resultado esperado | Resultado obtenido | Estado |
 |---|---|---|---|---|
-| EQ-01 | Listar equipos (`/equipo/index`) | GridView con ID, logo, nombre y fecha | Tabla visible con 4 equipos | OK |
+| EQ-01 | Listar equipos (`/equipo/index`) | GridView con ID, logo, nombre y fecha | Tabla visible con 6 equipos | OK |
 | EQ-02 | Crear equipo válido con logo | Guarda, asigna `created_at` y redirige a `view` | Equipo creado y detalle mostrado | OK |
 | EQ-03 | Crear sin nombre | Error "Nombre del Equipo no puede estar vacío" | Validación mostrada | OK |
 | EQ-04 | Crear sin logo (escenario `create`) | Error "El logo no puede estar vacío." | Mensaje mostrado | OK |
