@@ -2,6 +2,8 @@
 
 Documento de pruebas funcionales del sistema web **La Canasta - Torneo Navideño de Básquetbol**, desarrollado con **Yii 2** y **PHP 8**. Resume qué se probó, qué mejoras se aplicaron y qué errores se corrigieron.
 
+> **Alcance temporal:** todas las pruebas aquí documentadas se ejecutaron en el **entorno local de desarrollo (XAMPP / servidor embebido de Yii)**, **antes** de publicar la aplicación en producción. La publicación posterior en InfinityFree se describe en el `README.md` (sección 3) y en el `docs/Manual_Tecnico_La_Canasta.pdf`.
+
 | Dato | Valor |
 |---|---|
 | Proyecto | La Canasta - Torneo Navideño de Básquetbol |

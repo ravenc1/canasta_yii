@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Manual Técnico - La Canasta</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.5;
+    color: #1c2533;
+    margin: 0;
+  }
+
+  h1, h2, h3, h4 { color: #0f2a5c; line-height: 1.25; margin: 0 0 .4em; }
+  h1 { font-size: 20pt; color: #0f2a5c; border-bottom: 3px solid #e2571e; padding-bottom: 6px; }
+  h2 { font-size: 15pt; margin-top: 1.2em; color: #123a7a; }
+  h3 { font-size: 12.5pt; margin-top: 1em; color: #1b4c96; }
+  h4 { font-size: 11pt; color: #333; }
+
+  p { margin: 0 0 .7em; text-align: justify; }
+  ul, ol { margin: 0 0 .8em 1.2em; padding-left: .6em; }
+  li { margin-bottom: .25em; }
+
+  code {
+    font-family: Consolas, "Courier New", monospace;
+    background: #eef2f8; color: #b03500;
+    padding: 1px 4px; border-radius: 3px; font-size: 9.5pt;
+  }
+  pre {
+    background: #0f172a; color: #e6edf7; padding: 10px 12px;
+    border-radius: 6px; font-family: Consolas, monospace; font-size: 9pt;
+    line-height: 1.45; overflow-x: auto; white-space: pre-wrap;
+    border-left: 4px solid #e2571e;
+  }
+  pre code { background: none; color: inherit; padding: 0; }
+
+  table {
+    width: 100%; border-collapse: collapse; margin: .5em 0 1em;
+    font-size: 9.5pt;
+  }
+  th, td { border: 1px solid #c3cede; padding: 5px 8px; text-align: left; vertical-align: top; }
+  th { background: #123a7a; color: #fff; font-weight: 600; }
+  tr:nth-child(even) td { background: #f4f7fb; }
+
+  .cover { text-align: center; height: 247mm; position: relative; page-break-after: always; }
+  .cover .uni { font-size: 13pt; font-weight: 700; color: #0f2a5c; line-height: 1.4; }
+  .cover .fac { font-size: 11.5pt; color: #333; margin-bottom: 4px; }
+  .cover .logo { margin: 26px auto 10px; }
+  .cover .logo img { width: 130px; height: 130px; object-fit: contain; }
+  .cover h1 { font-size: 26pt; border: none; margin-top: 22px; padding: 0; }
+  .cover .sub { font-size: 14pt; color: #e2571e; font-weight: 700; margin-bottom: 26px; }
+  .cover .meta { display: inline-block; text-align: left; margin: 0 auto; }
+  .cover .meta td { border: none; padding: 2px 10px; background: none !important; }
+  .cover .meta td:first-child { font-weight: 700; color: #0f2a5c; }
+  .cover .foot { position: absolute; bottom: 0; left: 0; right: 0; color: #666; font-size: 10pt; }
+
+  .pagebreak { page-break-before: always; }
+
+  .toc ol { list-style: none; margin-left: 0; }
+  .toc li { margin-bottom: .3em; }
+  .toc .lvl2 { margin-left: 1.5em; color: #444; font-size: 9.5pt; }
+
+  .badge { display: inline-block; background: #d4edda; color: #17623a; border: 1px solid #a7d7b8;
+    border-radius: 10px; padding: 0 8px; font-size: 8.5pt; font-weight: 700; }
+  .note { background: #fff7ec; border-left: 4px solid #e2571e; padding: 8px 12px; margin: .6em 0 1em;
+    border-radius: 4px; font-size: 9.8pt; }
+  .warn { background: #fdecea; border-left: 4px solid #c0392b; padding: 8px 12px; margin: .6em 0 1em;
+    border-radius: 4px; font-size: 9.8pt; }
+</style>
+</head>
+<body>
+
+<!-- ============ PORTADA ============ -->
+<div class="cover">
+  <div class="uni">UNIVERSIDAD MARIANO GÁLVEZ DE GUATEMALA</div>
+  <div class="fac">Facultad de Ingeniería en Sistemas de Información</div>
+  <div class="fac">Centro Universitario Villanueva</div>
+  <div class="fac">Proyecto Final: Desarrollo Web &mdash; Jornada Sábado</div>
+
+  <div class="logo"><img src="../web/uploads/icono/lacanasta.jpg" alt="La Canasta"></div>
+
+  <h1>La Canasta</h1>
+  <div class="sub">Sistema de Gestión del Torneo Navideño de Básquetbol</div>
+  <div style="font-size:12pt;color:#333;margin-bottom:26px;">Manual Técnico de Publicación y Uso del Framework</div>
+
+  <table class="meta" style="width:auto;">
+    <tr><td>Framework</td><td>Yii 2 (versión 2.0.55)</td></tr>
+    <tr><td>Lenguaje</td><td>PHP 8</td></tr>
+    <tr><td>Base de datos</td><td>MySQL / MariaDB</td></tr>
+    <tr><td>Hosting</td><td>InfinityFree (plan gratuito)</td></tr>
+    <tr><td>URL publicada</td><td>https://lacanastayii.gt.tc/</td></tr>
+  </table>
+
+  <div style="margin-top:26px;font-weight:700;color:#0f2a5c;">Integrantes del Grupo 1</div>
+  <table style="width:70%;margin:6px auto 0;">
+    <thead><tr><th>Nombre</th><th>Carné</th></tr></thead>
+    <tbody>
+      <tr><td>Ricardo Andree Arias Conde</td><td>5190-19-3821</td></tr>
+      <tr><td>Angel Adrian Arias Conde</td><td>5190-18-16246</td></tr>
+      <tr><td>Darlyng Yasmin Marroquín Sosa</td><td>5190-17-24336</td></tr>
+    </tbody>
+  </table>
+
+  <div class="foot">Guatemala, octubre de 2026</div>
+</div>
+
+<!-- ============ ÍNDICE ============ -->
+<h1>Índice de contenido</h1>
+<div class="toc">
+<ol>
+  <li>1. Introducción
+    <div class="lvl2">1.1 Objetivo del proyecto &nbsp;·&nbsp; 1.2 Framework asignado &nbsp;·&nbsp; 1.3 Alcance funcional &nbsp;·&nbsp; 1.4 URL publicada</div>
+  </li>
+  <li>2. Manual Técnico de Publicación
+    <div class="lvl2">2.1 Prerrequisitos &nbsp;·&nbsp; 2.2 Fase 1: desarrollo y pruebas locales &nbsp;·&nbsp; 2.3 Fase 2: publicación en producción (InfinityFree) &nbsp;·&nbsp; 2.4 Verificación &nbsp;·&nbsp; 2.5 Actualización del sitio</div>
+  </li>
+  <li>3. Pasos utilizados para hacer uso del framework
+    <div class="lvl2">3.1 al 3.10</div>
+  </li>
+  <li>4. Recomendaciones para el uso del framework</li>
+  <li>5. Comentarios personales del grupo</li>
+  <li>6. Anexos
+    <div class="lvl2">A. Estructura del proyecto · B. Rutas principales · C. Datos iniciales · D. Requerimientos vs. cumplimiento · E. Repositorio</div>
+  </li>
+</ol>
+</div>
+
+<!-- ============ 1 ============ -->
+<div class="pagebreak"></div>
+<h1>1. Introducción</h1>
+
+<h2>1.1 Objetivo del proyecto</h2>
+<p>El presente proyecto consiste en el desarrollo de una aplicación web usando un <strong>framework de desarrollo para el lenguaje PHP</strong>. El caso asignado es la tienda de artículos deportivos <strong>La Canasta</strong>, que necesita un sistema para registrar los resultados de todo el <strong>Torneo Navideño de Básquetbol</strong>, incluyendo los equipos, sus integrantes y las anotaciones de cada jornada, además de generar reportes estadísticos.</p>
+
+<h2>1.2 Framework asignado</h2>
+<p>El framework asignado al grupo fue <strong>Yii 2</strong>, en su versión reciente <strong>2.0.55</strong>. Se trabajó sobre la plantilla <em>Yii 2 Basic Project Template</em>, con <strong>PHP 8</strong> y <strong>MySQL/MariaDB</strong>. La interfaz usa <strong>Bootstrap 5</strong> a través del paquete <code>yiisoft/yii2-bootstrap5</code>.</p>
+
+<h2>1.3 Alcance funcional</h2>
+<p>El sistema cumple los siguientes requerimientos del enunciado:</p>
+<table>
+  <thead><tr><th style="width:58%">Requerimiento</th><th>Estado</th></tr></thead>
+  <tbody>
+    <tr><td>Registro de jugadores: nombres y apellidos en campos distintos</td><td><span class="badge">Cumplido</span></td></tr>
+    <tr><td>Fecha de nacimiento y fotografía del jugador</td><td><span class="badge">Cumplido</span></td></tr>
+    <tr><td>Equipo como catálogo, con logo del equipo</td><td><span class="badge">Cumplido</span></td></tr>
+    <tr><td>Registro de puntos por jugador en cada jornada</td><td><span class="badge">Cumplido</span></td></tr>
+    <tr><td>Tipo de tiro como catálogo (libre, dos puntos, tres puntos)</td><td><span class="badge">Cumplido</span></td></tr>
+    <tr><td>Reporte: lista general de jugadores agrupada por equipo (con fotografía)</td><td><span class="badge">Cumplido</span></td></tr>
+    <tr><td>Reporte: jugadores por equipo, ordenados alfabéticamente por apellidos</td><td><span class="badge">Cumplido</span></td></tr>
+    <tr><td>Reporte: máximos anotadores, ordenado de mayor a menor</td><td><span class="badge">Cumplido</span></td></tr>
+    <tr><td>Consulta en pantalla de la ficha completa de un jugador</td><td><span class="badge">Cumplido</span></td></tr>
+  </tbody>
+</table>
+
+<h2>1.4 URL publicada</h2>
+<p>La aplicación se encuentra publicada y accesible en Internet con certificado SSL (HTTPS):</p>
+<pre><code>https://lacanastayii.gt.tc/</code></pre>
+<p>El código fuente completo está disponible en el repositorio del proyecto (ver Anexo E).</p>
+
+<!-- ============ 2 ============ -->
+<div class="pagebreak"></div>
+<h1>2. Manual Técnico de Publicación</h1>
+<p>Esta sección describe el procedimiento completo, en orden cronológico, para dejar la aplicación funcionando y publicada en Internet. El proceso se organiza en <strong>dos fases claramente diferenciadas</strong>:</p>
+<ol>
+  <li><strong>Fase 1 — Desarrollo y pruebas locales:</strong> se instala el framework y las dependencias con <strong>Composer</strong>, se crea la base de datos y se prueba todo en una máquina local con <strong>XAMPP</strong>.</li>
+  <li><strong>Fase 2 — Publicación en producción:</strong> una vez validada localmente, la aplicación se publica en un hosting gratuito (<strong>InfinityFree</strong>).</li>
+</ol>
+<div class="note"><strong>Importante:</strong> Composer, el script <code>yii</code> y las migraciones son herramientas del <strong>entorno local de desarrollo</strong>. El servidor de producción <strong>no</strong> las tiene ni las necesita.</div>
+
+<h2>2.1 Prerrequisitos</h2>
+<p>Software necesario, indicando el entorno en el que se utiliza cada herramienta:</p>
+<table>
+  <thead><tr><th>Software</th><th>Versión recomendada</th><th>Entorno</th><th>Uso</th></tr></thead>
+  <tbody>
+    <tr><td>PHP</td><td>8.0 o superior</td><td>Local y producción</td><td>Lenguaje de la aplicación</td></tr>
+    <tr><td>Composer</td><td>2.x</td><td>Local</td><td>Gestor de dependencias (instala Yii 2 y librerías)</td></tr>
+    <tr><td>MySQL / MariaDB</td><td>8.0 / 10.4 o superior</td><td>Local y producción</td><td>Base de datos del sistema</td></tr>
+    <tr><td>XAMPP</td><td>Reciente</td><td>Local</td><td>Paquete con Apache + MySQL + PHP (entorno de desarrollo)</td></tr>
+    <tr><td>Git</td><td>Reciente</td><td>Local</td><td>Clonar el repositorio</td></tr>
+    <tr><td>Navegador web</td><td>Chrome / Edge recientes</td><td>Local y producción</td><td>Acceso a la aplicación</td></tr>
+    <tr><td>Cliente FTP</td><td>FileZilla</td><td>Producción</td><td>Subir archivos al hosting</td></tr>
+  </tbody>
+</table>
+<div class="note"><strong>Extensiones de PHP requeridas:</strong> <code>pdo_mysql</code> y <code>mbstring</code>. En XAMPP vienen habilitadas por defecto. Se pueden verificar con <code>php -m</code>.</div>
+
+<h2>2.2 Fase 1 — Desarrollo y pruebas locales (XAMPP)</h2>
+<p>En esta fase se instala el framework con <strong>Composer</strong> y se prueba la aplicación en la máquina local. <strong>Todos los pasos siguientes son locales</strong>; el servidor de producción no los ejecuta.</p>
+
+<h3>2.2.1 Clonar el repositorio</h3>
+<pre><code>git clone https://github.com/ravenc1/canasta_yii.git
+cd canasta_yii</code></pre>
+
+<h3>2.2.2 Instalar dependencias</h3>
+<p>Instala exactamente las versiones registradas en <code>composer.lock</code> (Yii 2, Bootstrap 5, JQuery UI, SwiftMailer, Gii, Debug):</p>
+<pre><code>composer install</code></pre>
+
+<h3>2.2.3 Crear la base de datos</h3>
+<p>Crea la base de datos <code>lacanasta_db</code> con codificación <code>utf8mb4</code>:</p>
+<pre><code>mysql -u root -e "CREATE DATABASE IF NOT EXISTS lacanasta_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"</code></pre>
+
+<h3>2.2.4 Ejecutar migraciones (crear tablas + datos iniciales)</h3>
+<pre><code>php yii migrate --interactive=0</code></pre>
+<p>Esto crea las tablas <code>equipo</code>, <code>jugador</code>, <code>tipo_tiro</code> y <code>puntuacion</code>, e inserta los datos iniciales: <strong>6 equipos, 30 jugadores, 3 tipos de tiro y 77 puntuaciones</strong>.</p>
+
+<h3>2.2.5 Levantar el servidor de desarrollo</h3>
+<pre><code>php yii serve</code></pre>
+<p>La aplicación queda disponible en <code>http://localhost:8080/</code>.</p>
+
+<h3>2.2.6 Pruebas funcionales locales</h3>
+<p>Antes de publicar, la aplicación se probó de forma manual y funcional en el entorno local. Los 45 casos de prueba (módulos de equipos, jugadores, puntuaciones, reportes, interfaz e integridad de IDs) se documentan en el archivo <code>PRUEBAS.md</code> del repositorio. Solo tras validar el funcionamiento local se procedió a la publicación.</p>
+
+<h2>2.3 Fase 2 — Publicación en producción (InfinityFree)</h2>
+<p>Una vez validada la aplicación en local, se publica en <strong>InfinityFree</strong>, un hosting gratuito con <strong>PHP 8.4, MySQL 8.0 / MariaDB 11.4, soporte total de <code>.htaccess</code></strong> y certificados SSL gratuitos. Este servidor tiene dos restricciones importantes que condicionan el despliegue:</p>
+<ul>
+  <li><strong>No hay acceso por SSH ni terminal:</strong> no se puede ejecutar <code>composer</code> ni <code>php yii migrate</code> en el servidor.</li>
+  <li><strong>El directorio raíz del sitio (<em>document root</em>) es <code>htdocs</code></strong> y no puede cambiarse: siempre apunta a la carpeta <code>htdocs</code>.</li>
+</ul>
+<p>Por eso, en el servidor se resuelve así: la carpeta <code>vendor</code> se sube ya construida, los datos se importan por phpMyAdmin y un archivo <code>.htaccess</code> en la raíz redirige todo hacia <code>web/</code> (el directorio público real de Yii).</p>
+
+<h3>2.3.1 Crear la cuenta y el dominio</h3>
+<ol>
+  <li>Registrarse en <code>https://dash.infinityfree.com/register</code> (solo correo, sin tarjeta).</li>
+  <li>Crear una cuenta de hosting y elegir un subdominio gratuito (en este proyecto, <code>lacanastayii.gt.tc</code>).</li>
+  <li>Anotar los datos de acceso FTP que muestra el panel de control.</li>
+</ol>
+
+<h3>2.3.2 Crear la base de datos</h3>
+<ol>
+  <li>En el panel de control, abrir <strong>MySQL Databases</strong> y crear una base de datos.</li>
+  <li>Anotar los cuatro valores de conexión: <strong>host</strong> (por ejemplo <code>sqlXXX.infinityfree.com</code>), <strong>nombre de la base</strong>, <strong>usuario</strong> y <strong>contraseña</strong>. En InfinityFree estos suelen tener el prefijo <code>if0_</code>.</li>
+</ol>
+
+<h3>2.3.3 Importar los datos (dump SQL)</h3>
+<p>Como el servidor no permite ejecutar migraciones, se genera un respaldo <code>.sql</code> de la base local y se importa:</p>
+<pre><code># En la máquina local, generar el respaldo:
+mysqldump -u root --no-create-db --default-character-set=utf8mb4 lacanasta_db &gt; lacanasta_db.sql</code></pre>
+<ol>
+  <li>Abrir <strong>phpMyAdmin</strong> desde el panel de InfinityFree.</li>
+  <li>Seleccionar la base de datos creada y entrar a la pestaña <strong>Import</strong>.</li>
+  <li>Subir <code>lacanasta_db.sql</code> y confirmar. Deben quedar <strong>6 equipos, 30 jugadores, 3 tipos de tiro y 77 puntuaciones</strong>.</li>
+</ol>
+
+<h3>2.3.4 Configurar la conexión</h3>
+<p>Editar <code>config/db.php</code> con los datos obtenidos en el paso 2.3.2:</p>
+<pre><code>return [
+    'class'    =&gt; 'yii\db\Connection',
+    'dsn'      =&gt; 'mysql:host=sqlXXX.infinityfree.com;dbname=if0_XXXXXXX_lacanasta;charset=utf8mb4',
+    'username' =&gt; 'if0_XXXXXXX',
+    'password' =&gt; 'TU_PASSWORD',
+    'charset'  =&gt; 'utf8mb4',
+];</code></pre>
+<div class="warn"><strong>Recomendado en producción:</strong> en <code>web/index.php</code> desactivar el modo de depuración, para no exponer rutas ni trazas de error a los visitantes:<br>
+<code>YII_DEBUG = false</code> y <code>YII_ENV = 'prod'</code>.</div>
+
+<h3>2.3.5 Subir los archivos al servidor</h3>
+<p>Subir <strong>el contenido del proyecto dentro de <code>htdocs/</code></strong> (es decir, <code>htdocs/</code> debe contener <code>config/</code>, <code>controllers/</code>, <code>models/</code>, <code>views/</code>, <code>vendor/</code>, <code>runtime/</code>, <code>web/</code> y el <code>.htaccess</code> de la raíz). Se recomienda <strong>FTP (FileZilla)</strong> por la cantidad de archivos de <code>vendor/</code>.</p>
+<table>
+  <thead><tr><th>Elemento</th><th>¿Por qué?</th></tr></thead>
+  <tbody>
+    <tr><td><code>vendor/</code></td><td>No hay Composer en el servidor; debe subirse ya construida</td></tr>
+    <tr><td><code>runtime/</code></td><td>Carpeta de trabajo de Yii (caché y logs); debe existir y ser escribible</td></tr>
+    <tr><td><code>web/assets/</code></td><td>Yii publica aquí los recursos (CSS/JS); debe existir y ser escribible</td></tr>
+    <tr><td><code>.htaccess</code> (raíz)</td><td>Redirige las peticiones hacia <code>web/</code></td></tr>
+    <tr><td><code>web/.htaccess</code></td><td>Habilita las URLs amigables (pretty URLs)</td></tr>
+  </tbody>
+</table>
+
+<h3>2.3.6 Estructura en el servidor y .htaccess</h3>
+<p>El archivo <code>.htaccess</code> de la raíz contiene:</p>
+<pre><code>RewriteEngine on
+RewriteRule ^(.*)$ web/$1 [L]</code></pre>
+<p>De esta forma, aunque el <em>document root</em> apunte a <code>htdocs</code>, el contenido público real (el que Yii espera) es el de la carpeta <code>web/</code>, y todas las peticiones se enrutan correctamente.</p>
+
+<h3>2.3.7 SSL / HTTPS gratuito</h3>
+<p>Desde el panel de control, usar la herramienta <strong>Free SSL Certificates</strong> para emitir el certificado del dominio. Con esto la aplicación queda accesible por <code>https://</code>.</p>
+
+<h2>2.4 Verificación de la publicación</h2>
+<p>Comprobaciones realizadas sobre el sitio en línea:</p>
+<table>
+  <thead><tr><th>Comprobación</th><th>Resultado</th></tr></thead>
+  <tbody>
+    <tr><td>Página de inicio responde y renderiza</td><td><span class="badge">OK</span></td></tr>
+    <tr><td>HTTPS / SSL activo</td><td><span class="badge">OK</span></td></tr>
+    <tr><td>Hojas de estilo (CSS) y assets publicados</td><td><span class="badge">OK</span></td></tr>
+    <tr><td>Imágenes (logos, fotos, favicon) visibles</td><td><span class="badge">OK</span></td></tr>
+    <tr><td>Módulos de equipos, jugadores y puntuaciones con datos</td><td><span class="badge">OK</span></td></tr>
+    <tr><td>Reportes (general, por equipo, máximos anotadores y perfil)</td><td><span class="badge">OK</span></td></tr>
+  </tbody>
+</table>
+
+<h2>2.5 Actualización del sitio</h2>
+<ol>
+  <li>Modificar los archivos localmente y probar.</li>
+  <li>Subir por FTP solo los archivos modificados, respetando la estructura de <code>htdocs/</code>.</li>
+  <li>Si se cambian migraciones o modelos, actualizar también la base de datos remota por phpMyAdmin.</li>
+</ol>
+
+<!-- ============ 3 ============ -->
+<div class="pagebreak"></div>
+<h1>3. Pasos utilizados para hacer uso del framework</h1>
+<p>Esta sección describe, en orden, cómo se utilizó Yii 2 para construir la aplicación.</p>
+
+<h3>3.1 Creación del proyecto base</h3>
+<p>Se creó la estructura inicial con <strong>Yii 2 Basic Project Template</strong> mediante Composer. La plantilla genera la organización MVC típica de Yii: <code>config/</code>, <code>controllers/</code>, <code>models/</code>, <code>views/</code>, <code>web/</code> y un script de consola <code>yii</code>.</p>
+
+<h3>3.2 Configuración de la aplicación</h3>
+<p>En <code>config/web.php</code> se configuraron los componentes de la aplicación:</p>
+<ul>
+  <li><strong>Base de datos</strong> (<code>db</code>) apuntando a <code>config/db.php</code>.</li>
+  <li><strong>URL Manager</strong> con <code>enablePrettyUrl = true</code> y <code>showScriptName = false</code>.</li>
+  <li><strong>Idioma</strong> de la aplicación en español.</li>
+  <li><strong>AssetManager</strong> para la publicación de recursos.</li>
+</ul>
+
+<h3>3.3 Migraciones (esquema de base de datos)</h3>
+<p>En lugar de crear las tablas a mano, se usaron <strong>migraciones</strong>, que versionan el esquema y permiten reconstruir la base de datos con un comando. Se crearon migraciones para las tablas <code>equipo</code>, <code>jugador</code>, <code>tipo_tiro</code> y <code>puntuacion</code>, con <strong>claves foráneas <code>ON DELETE CASCADE</code></strong>, y una migración final (<em>seeder</em>) con los datos iniciales.</p>
+
+<h3>3.4 Modelos con ActiveRecord</h3>
+<p>Cada tabla se mapeó a un modelo ActiveRecord: <code>Equipo</code>, <code>Jugador</code>, <code>TipoTiro</code> y <code>Puntuacion</code>. En los modelos se definieron:</p>
+<ul>
+  <li><strong>Reglas de validación</strong> (<code>rules()</code>) y etiquetas de atributos.</li>
+  <li><strong>Relaciones</strong> entre tablas (<code>hasOne</code> / <code>hasMany</code>), por ejemplo jugador&ndash;equipo y puntuación&ndash;tipo de tiro.</li>
+  <li>Métodos propios, como la carga de archivos (logo y fotografía) y el cálculo automático de puntos según el tipo de tiro.</li>
+</ul>
+
+<h3>3.5 Controladores y acciones CRUD</h3>
+<p>Se implementaron controladores (<code>EquipoController</code>, <code>JugadorController</code>, <code>PuntuacionController</code>, <code>ReportesController</code>) con acciones para listar, crear, ver, editar y eliminar. La carga de archivos se maneja con <code>UploadedFile</code> y la validación se refuerza con <code>addError()</code> cuando un archivo no puede guardarse.</p>
+
+<h3>3.6 Vistas y layout</h3>
+<p>Se desarrollaron las vistas CRUD (listado con <code>GridView</code>, formularios reutilizables <code>_form.php</code>, detalle) y un <strong>layout principal</strong> (<code>views/layouts/main.php</code>) con barra de navegación, menús desplegables y personalización visual (fondo aleatorio, contenedores semitransparentes y favicon dinámico).</p>
+
+<h3>3.7 Generador de código Gii</h3>
+<p>Se usó la herramienta <strong>Gii</strong> de Yii 2 para generar los modelos y el esqueleto de los CRUD a partir de las tablas, y luego se adaptaron a las necesidades del torneo.</p>
+
+<h3>3.8 AssetBundle y Bootstrap 5</h3>
+<p>Se definió un <strong>AssetBundle</strong> (<code>assets/AppAsset.php</code>) que registra la hoja de estilos propia y depende de Bootstrap 5, permitiendo una interfaz moderna y responsiva.</p>
+
+<h3>3.9 Carga de archivos (logo y fotografía)</h3>
+<p>Los modelos <code>Equipo</code> y <code>Jugador</code> incluyen reglas de tipo <code>file</code> (extensiones y tamaño máximo de 2 MB) y métodos que guardan los archivos en <code>web/uploads/</code>. Un <em>helper</em> (<code>ImagenHelper</code>) construye las URL y usa una imagen de reserva si el archivo no existe.</p>
+
+<h3>3.10 Reportes y consultas</h3>
+<p>Los reportes combinan el uso de <strong>ActiveRecord</strong> con consultas mediante <code>Query</code> y agregaciones SQL. Por ejemplo, los máximos anotadores usan <code>SUM(puntuacion.puntos)</code> agrupado por jugador y ordenado de mayor a menor.</p>
+
+<!-- ============ 4 ============ -->
+<div class="pagebreak"></div>
+<h1>4. Recomendaciones para el uso del framework</h1>
+<ul>
+  <li><strong>Usar migraciones, no SQL manual.</strong> Versionar el esquema permite reconstruir la base de datos en cualquier equipo con un solo comando y mantener el control de cambios.</li>
+  <li><strong>Dejar que Gii acelere el arranque.</strong> Genera modelos y CRUD base muy rápido; después solo hay que adaptar reglas, vistas y estilos.</li>
+  <li><strong>Configurar <code>prettyUrl</code> desde el inicio</strong> y añadir el <code>.htaccess</code> correspondiente; las URLs limpias mejoran la presentación del proyecto.</li>
+  <li><strong>Gestionar los entornos.</strong> Mantener <code>YII_DEBUG</code> en <code>false</code> y <code>YII_ENV</code> en <code>prod</code> en el servidor para no exponer información interna.</li>
+  <li><strong>Separar la configuración sensible.</strong> Las credenciales de la base de datos deben ir en <code>config/db.php</code> (o en archivos locales ignorados por el control de versiones), nunca en el código de la lógica de negocio.</li>
+  <li><strong>Usar las validaciones del modelo.</strong> Concentrar las reglas en <code>rules()</code> evita duplicar comprobaciones en los controladores.</li>
+  <li><strong>Preparar el despliegue en hosting compartido.</strong> Si el servidor no tiene Composer ni terminal, subir <code>vendor/</code> ya construida e importar la base por phpMyAdmin.</li>
+  <li><strong>Cuidar la seguridad de las subidas.</strong> Restringir extensiones y tamaño máximo en los archivos cargados, y validar siempre en el servidor.</li>
+  <li><strong>Leer la guía oficial.</strong> La documentación de Yii 2 (<em>yiiframework.com/doc/guide/2.0</em>) y la comunidad resuelven la mayoría de dudas; conviene revisarla antes de implementar desde cero.</li>
+</ul>
+
+<h1>5. Comentarios personales del grupo</h1>
+<p>Valoración del grupo sobre la facilidad o dificultad de uso del framework Yii 2:</p>
+
+<h3>Facilidades encontradas</h3>
+<ul>
+  <li>La generación automática de código con <strong>Gii</strong> ahorró mucho tiempo en los CRUD.</li>
+  <li><strong>ActiveRecord</strong> simplificó las consultas y las relaciones entre tablas.</li>
+  <li>La integración con <strong>Bootstrap 5</strong> permitió una interfaz moderna con poco esfuerzo.</li>
+  <li>Las <strong>migraciones</strong> facilitaron trabajar en equipo con una base de datos reproducible.</li>
+  <li>La documentación oficial es amplia y está bien estructurada.</li>
+</ul>
+
+<h3>Dificultades encontradas</h3>
+<ul>
+  <li>La <strong>curva de aprendizaje inicial</strong> del patrón MVC y de la configuración de Yii requiere tiempo.</li>
+  <li>El despliegue en un hosting gratuito presentó retos por la <strong>falta de terminal y Composer</strong> en el servidor, y por no poder cambiar el <em>document root</em>.</li>
+  <li>La <strong>carga de archivos</strong> y su validación exige atención especial en los detalles.</li>
+  <li>Adaptar el <strong>estilo visual</strong> al gusto del grupo llevó varias iteraciones.</li>
+</ul>
+
+<h3>Conclusión del grupo</h3>
+<p>Yii 2 resultó un framework <strong>robusto y productivo</strong>. Tras superar la curva de aprendizaje inicial, sus herramientas (Gii, ActiveRecord, migraciones y la integración con Bootstrap) permitieron construir la aplicación de forma ordenada y rápida. La experiencia fue positiva y recomendamos su uso para proyectos web en PHP de tamaño pequeño y mediano.</p>
+
+<!-- ============ ANEXOS ============ -->
+<div class="pagebreak"></div>
+<h1>6. Anexos</h1>
+
+<h2>Anexo A. Estructura del proyecto</h2>
+<pre><code>canasta_yii/
+├── assets/          Definición de assets (AppAsset)
+├── commands/        Comandos de consola
+├── config/          Configuración (web.php, db.php, params.php, console.php)
+├── controllers/     Controladores MVC (Equipo, Jugador, Puntuacion, Reportes, Site)
+├── helpers/         Clases auxiliares (ImagenHelper)
+├── migrations/      Migraciones y datos iniciales
+├── models/          Modelos de datos y formularios
+├── views/           Vistas y layout principal
+├── web/             Document root (index.php, css, assets, uploads)
+├── composer.json    Dependencias del proyecto
+├── composer.lock    Versiones exactas de dependencias
+├── yii              Script de consola de Yii
+└── README.md        Documentación del proyecto</code></pre>
+
+<h2>Anexo B. Rutas principales</h2>
+<table>
+  <thead><tr><th>Módulo</th><th>Rutas</th></tr></thead>
+  <tbody>
+    <tr><td>Equipos</td><td><code>/equipo/index</code>, <code>/create</code>, <code>/view</code>, <code>/update</code>, <code>/delete</code></td></tr>
+    <tr><td>Jugadores</td><td><code>/jugador/index</code>, <code>/create</code>, <code>/view</code>, <code>/update</code>, <code>/delete</code></td></tr>
+    <tr><td>Puntuaciones</td><td><code>/puntuacion/index</code>, <code>/create</code>, <code>/delete</code></td></tr>
+    <tr><td>Reportes</td><td><code>/reportes/general</code>, <code>/por-equipo</code>, <code>/maximos-anotadores</code>, <code>/perfil?id=N</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Anexo C. Datos iniciales (migración semilla)</h2>
+<table>
+  <thead><tr><th>Entidad</th><th>Cantidad</th></tr></thead>
+  <tbody>
+    <tr><td>Equipos</td><td>6</td></tr>
+    <tr><td>Jugadores</td><td>30</td></tr>
+    <tr><td>Tipos de tiro</td><td>3 (Libre, Dos puntos, Tres puntos)</td></tr>
+    <tr><td>Puntuaciones</td><td>77</td></tr>
+  </tbody>
+</table>
+
+<h2>Anexo D. Requerimientos vs. cumplimiento</h2>
+<table>
+  <thead><tr><th style="width:62%">Requerimiento del enunciado</th><th>Evidencia</th></tr></thead>
+  <tbody>
+    <tr><td>Nombres y apellidos en campos diferentes</td><td>Tabla <code>jugador</code>; formulario de alta</td></tr>
+    <tr><td>Fecha de nacimiento</td><td>Campo <code>fecha_nacimiento</code> (tipo fecha)</td></tr>
+    <tr><td>Fotografía (imagen)</td><td>Carga de archivo con validación</td></tr>
+    <tr><td>Equipo con logo (catálogo)</td><td>CRUD de equipos + carga de logo</td></tr>
+    <tr><td>Jornada, puntos y tipo de tiro</td><td>Tabla <code>puntuacion</code> + catálogo <code>tipo_tiro</code></td></tr>
+    <tr><td>Lista general de jugadores agrupada por equipo</td><td>Reporte <code>/reportes/general</code></td></tr>
+    <tr><td>Jugadores por equipo, orden por apellidos</td><td>Reporte <code>/reportes/por-equipo</code></td></tr>
+    <tr><td>Máximos anotadores, de mayor a menor</td><td>Reporte <code>/reportes/maximos-anotadores</code></td></tr>
+    <tr><td>Ficha completa de un jugador</td><td>Reporte <code>/reportes/perfil</code></td></tr>
+  </tbody>
+</table>
+
+<h2>Anexo E. Repositorio del código fuente</h2>
+<pre><code>https://github.com/ravenc1/canasta_yii</code></pre>
+<p>El repositorio incluye el código fuente completo, las migraciones y las instrucciones de instalación y publicación (<code>README.md</code>).</p>
+
+</body>
+</html>

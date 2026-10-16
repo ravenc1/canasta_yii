@@ -23,9 +23,11 @@ La interfaz está personalizada con fondos de pantalla aleatorios, un menú supe
 
 ---
 
-## 2. Cómo clonar y ejecutar el proyecto (paso a paso)
+## 2. Entorno de desarrollo local (XAMPP)
 
-Procedimiento completo para clonar el repositorio en una máquina limpia y dejar la aplicación funcionando. Copia y pega los comandos en tu terminal (**PowerShell/CMD** en Windows, **bash** en Linux/macOS).
+Esta sección corresponde al **desarrollo y las pruebas locales** en una máquina con **XAMPP** (Apache + MySQL + PHP). Aquí sí se usa **Composer**, el script `yii` y las **migraciones**. Copia y pega los comandos en tu terminal (**PowerShell/CMD** en Windows, **bash** en Linux/macOS).
+
+> **Flujo del proyecto:** **(1)** desarrollo y pruebas locales (esta sección y [`PRUEBAS.md`](PRUEBAS.md)) → **(2)** publicación en el hosting (sección 3). Composer, `yii` y las migraciones **solo se usan en local**; el servidor de producción no los necesita.
 
 > El repositorio ya incluye `config/db.php`, la carpeta `web/assets/` (con `.gitkeep`), `composer.lock` y todas las imágenes de `web/uploads/`, por lo que **no necesitas crearlas a mano**.
 
@@ -134,7 +136,11 @@ php yii serve --port=8081
 
 > Mantén MySQL encendido mientras uses la aplicación; si está apagado verás errores de conexión en los módulos que consultan la base de datos.
 
-### 2.8 Resumen: clonación completa en un solo bloque
+### 2.8 Pruebas funcionales locales
+
+Antes de publicar, la aplicación se probó de forma **manual y funcional** en el entorno local (XAMPP). Los **45 casos de prueba** (módulos de equipos, jugadores, puntuaciones, reportes, interfaz e integridad de IDs) están documentados en el archivo [`PRUEBAS.md`](PRUEBAS.md).
+
+### 2.9 Resumen: clonación completa en un solo bloque
 
 **Windows (PowerShell/CMD) con XAMPP en `C:\xampp`:**
 
@@ -158,7 +164,7 @@ php yii migrate --interactive=0
 php yii serve
 ```
 
-### 2.9 Solución de problemas frecuentes
+### 2.10 Solución de problemas frecuentes
 
 | Problema | Causa / Solución |
 |---|---|
@@ -172,7 +178,91 @@ php yii serve
 
 ---
 
-## 3. Cómo se hizo el proyecto (pasos generales)
+## 3. Publicación en producción (InfinityFree)
+
+Una vez que la aplicación funciona y fue probada **localmente** (sección 2 y `PRUEBAS.md`), se publicó en un hosting gratuito **InfinityFree**, con el dominio:
+
+🔗 **https://lacanastayii.gt.tc/**
+
+> **Restricciones del servidor (definen el despliegue):**
+> - **No hay SSH ni terminal:** no se puede ejecutar `composer` ni `php yii migrate`.
+> - **El directorio raíz es siempre `htdocs`** y no se puede cambiar.
+>
+> Por eso, en el servidor: `vendor/` se sube ya construida, los datos se importan por **phpMyAdmin** y un **`.htaccess`** en la raíz redirige todo hacia `web/` (el directorio público real de Yii).
+
+### 3.1 Prerrequisitos
+
+- Cuenta gratuita en InfinityFree — <https://dash.infinityfree.com/register>
+- Un dominio o subdominio (en este proyecto, `lacanastayii.gt.tc`).
+- Un cliente FTP (se recomienda **FileZilla**).
+
+### 3.2 Crear la base de datos en el panel
+
+1. En el panel de control, abrir **MySQL Databases** y crear una base de datos.
+2. Anotar los cuatro datos de conexión: **host** (`sqlXXX.infinityfree.com`), **nombre**, **usuario** y **contraseña** (con prefijo `if0_`).
+
+### 3.3 Exportar los datos locales
+
+Genera un respaldo `.sql` desde la base de datos local (XAMPP):
+
+```bash
+C:\xampp\mysql\bin\mysqldump.exe -u root --no-create-db --default-character-set=utf8mb4 lacanasta_db > lacanasta_db.sql
+```
+
+> En el repositorio se incluye un respaldo listo para importar: **`deploy/lacanasta_db.sql`**.
+
+### 3.4 Importar los datos en el servidor
+
+1. Abrir **phpMyAdmin** desde el panel de InfinityFree.
+2. Seleccionar la base creada → pestaña **Import** → subir `lacanasta_db.sql`.
+3. Verificar: **6 equipos, 30 jugadores, 3 tipos de tiro y 77 puntuaciones**.
+
+### 3.5 Configurar la conexión
+
+Editar `config/db.php` **en el servidor** con los datos reales del hosting (host, nombre, usuario y contraseña).
+
+```php
+return [
+    'class'    => 'yii\db\Connection',
+    'dsn'      => 'mysql:host=sqlXXX.infinityfree.com;dbname=if0_XXXXXXX_lacanasta;charset=utf8mb4',
+    'username' => 'if0_XXXXXXX',
+    'password' => 'TU_PASSWORD',
+    'charset'  => 'utf8mb4',
+];
+```
+
+> **Buena práctica:** no subir estas credenciales al repositorio público; cambiarlas solo en el servidor.
+
+### 3.6 Subir los archivos
+
+Sube **todo el contenido del proyecto dentro de `htdocs/`**, de modo que quede `htdocs/web/`, `htdocs/config/`, `htdocs/vendor/`, `htdocs/runtime/`, `htdocs/.htaccess`, etc.
+
+- Método recomendado: **FTP con FileZilla**, por la cantidad de archivos de `vendor/`.
+- Asegúrate de subir `vendor/` (no viene en Git) y de que existan `runtime/` y `web/assets/`.
+
+### 3.7 Archivo `.htaccess` de la raíz
+
+```apache
+RewriteEngine on
+RewriteRule ^(.*)$ web/$1 [L]
+```
+
+### 3.8 Configuración de producción
+
+- En `web/index.php`: dejar `YII_DEBUG = false` y `YII_ENV = 'prod'`.
+- Activar el **SSL gratuito** (Free SSL Certificates) para servir la app por HTTPS.
+
+### 3.9 Verificación de la publicación
+
+| Comprobación | Resultado |
+|---|---|
+| Página de inicio, HTTPS, CSS/assets e imágenes | OK |
+| Módulos de equipos, jugadores y puntuaciones con datos | OK |
+| Reportes (general, por equipo, máximos anotadores y perfil) | OK |
+
+---
+
+## 4. Cómo se hizo el proyecto (pasos generales)
 
 1. Se creó la estructura base con **Yii 2 Basic Project Template** mediante Composer.
 2. Se configuró la conexión a MySQL en `config/db.php`.
@@ -186,7 +276,7 @@ php yii serve
 
 ---
 
-## 4. Estructura del proyecto y archivos principales
+## 5. Estructura del proyecto y archivos principales
 
 ```
 canasta_yii/
@@ -205,19 +295,19 @@ canasta_yii/
 └── README.md                # Este archivo
 ```
 
-### 4.1 Carpeta `assets/`
+### 5.1 Carpeta `assets/`
 
 | Archivo | Descripción |
 |---|---|
 | `AppAsset.php` | Declara el bundle de recursos de la aplicación. Registra `web/css/site.css` y depende de `YiiAsset`, `BootstrapAsset` y `BootstrapPluginAsset` (Bootstrap 5). |
 
-### 4.2 Carpeta `commands/`
+### 5.2 Carpeta `commands/`
 
 | Archivo | Descripción |
 |---|---|
 | `SeedController.php` | Comando de consola auxiliar (si se usa para sembrar datos). |
 
-### 4.3 Carpeta `config/`
+### 5.3 Carpeta `config/`
 
 | Archivo | Descripción |
 |---|---|
@@ -226,7 +316,7 @@ canasta_yii/
 | `db.php` | Credenciales y DSN de conexión a MySQL/MariaDB. |
 | `params.php` | Parámetros globales de la aplicación. |
 
-### 4.4 Carpeta `controllers/`
+### 5.4 Carpeta `controllers/`
 
 | Archivo | Descripción |
 |---|---|
@@ -236,13 +326,13 @@ canasta_yii/
 | `PuntuacionController.php` | Listado y registro de puntuaciones/tiros por jornada. |
 | `ReportesController.php` | Reportes: lista general, jugadores por equipo, máximos anotadores y perfil individual. |
 
-### 4.5 Carpeta `helpers/`
+### 5.5 Carpeta `helpers/`
 
 | Archivo | Descripción |
 |---|---|
 | `ImagenHelper.php` | Helper para generar la URL de logos y fotografías subidas en `web/uploads/`. |
 
-### 4.6 Carpeta `migrations/`
+### 5.6 Carpeta `migrations/`
 
 | Archivo | Descripción |
 |---|---|
@@ -252,7 +342,7 @@ canasta_yii/
 | `m241013_000004_create_puntuacion_table.php` | Crea la tabla `puntuacion` (jugador, tipo de tiro, cantidad, jornada, fecha). |
 | `m241013_000005_seed_data.php` | Inserta los datos iniciales (6 equipos, 30 jugadores, 3 tipos de tiro y 77 puntuaciones). |
 
-### 4.7 Carpeta `models/`
+### 5.7 Carpeta `models/`
 
 | Archivo | Descripción |
 |---|---|
@@ -264,7 +354,7 @@ canasta_yii/
 | `LoginForm.php` | Formulario de inicio de sesión. |
 | `ContactForm.php` | Formulario de contacto. |
 
-### 4.8 Carpeta `views/`
+### 5.8 Carpeta `views/`
 
 #### `views/layouts/`
 
@@ -316,7 +406,7 @@ canasta_yii/
 | `maximos-anotadores.php` | Tabla de posiciones por puntos (mayor a menor). |
 | `perfil.php` | Ficha individual del jugador con sus estadísticas. |
 
-### 4.9 Carpeta `web/`
+### 5.9 Carpeta `web/`
 
 | Ruta | Descripción |
 |---|---|
@@ -331,8 +421,11 @@ canasta_yii/
 
 ---
 
-## 5. Notas importantes
+## 6. Notas importantes
 
+- La aplicación está **publicada en producción** en InfinityFree (sección 3). El informe técnico completo está en `docs/Manual_Tecnico_La_Canasta.pdf`.
+- **`PRUEBAS.md`** documenta las pruebas funcionales realizadas en el **entorno local, antes** de la publicación.
+- El proyecto está organizado en dos entornos: **local** (XAMPP + Composer + migraciones) y **producción** (InfinityFree + `vendor/` subida + datos importados por phpMyAdmin).
 - Si el fondo o las imágenes no se ven, verificar permisos y que la carpeta `web/uploads/` exista.
 - Si la base de datos falla, confirmar que MySQL esté iniciado y que `config/db.php` tenga las credenciales correctas.
 - Los datos iniciales (**6 equipos, 30 jugadores, 3 tipos de tiro y 77 puntuaciones**) los carga el seeder al ejecutar `php yii migrate`. Para regenerarlos: `php yii migrate/down --all --interactive=0` y luego `php yii migrate --interactive=0`.
